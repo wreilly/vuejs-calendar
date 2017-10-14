@@ -1,12 +1,12 @@
 {
-  "name": "vue-calendar",
+  "name": "wr-vue-calendar",
   "version": "1.0.0",
-  "description": "Ultimate Vue.js Developers Course",
+  "description": "Project 3 - Calendar - Ultimate Vue.js Developers Course",
   "main": "server.js",
-  "author": "Anthony Gore <info@getjsdojo.com>",
+  "author": "William Reilly - Anthony Gore <info@getjsdojo.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vuejsdevelopers/vuejs-calendar"
+    "url": "https://github.com/wreilly/vuejs-calendar"
   },
   "license": "UNLICENSED",
   "scripts": {
