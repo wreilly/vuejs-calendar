@@ -1,16 +1,26 @@
 <template>
-    <div id="calendar">
-        <!--<p>{{ msg }}</p>-->
-        <!--<p>Weeks!</p>-->
-        <div v-for="week in weeks" class="calendar-week">
-            <!--Week! Set of 7 "calendar-day" components, my friend.-->
-            <calendar-day v-for="day in week" v-bind:dayForCDay="day"></calendar-day>
+    <div>
+        <div id="day-bar">
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+            <div>Sun</div>
         </div>
-
-<!--
-        <p>Days!</p>
-        <div v-for="day in days">{{ day }}</div>
--->
+        <div id="calendar">
+            <!--<p>{{ msg }}</p>-->
+            <!--<p>Weeks!</p>-->
+            <div v-for="week in weeks" class="calendar-week">
+                <!--Week! Set of 7 "calendar-day" components, my friend.-->
+                <calendar-day v-for="day in week" v-bind:dayForCDay="day"></calendar-day>
+            </div>
+            <!--
+                    <p>Days!</p>
+                    <div v-for="day in days">{{ day }}</div>
+            -->
+        </div>
     </div>
 </template>
 
