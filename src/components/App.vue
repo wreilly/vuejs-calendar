@@ -1,18 +1,22 @@
 <template>
-    <div>
-        <p>{{ msg }}</p>
-        <p>Weeks!</p>
-        <div v-for="week in weeks">
-            Week!
-            <div v-for="day in week">{{ day }}</div>
+    <div id="calendar">
+        <!--<p>{{ msg }}</p>-->
+        <!--<p>Weeks!</p>-->
+        <div v-for="week in weeks" class="calendar-week">
+            <!--Week! Set of 7 "calendar-day" components, my friend.-->
+            <calendar-day v-for="day in week" v-bind:dayForCDay="day"></calendar-day>
         </div>
 
+<!--
         <p>Days!</p>
         <div v-for="day in days">{{ day }}</div>
+-->
     </div>
 </template>
 
 <script>
+    import CalendarDay from './CalendarDay.vue'
+
     export default {
         data() {
             return {
@@ -20,6 +24,9 @@
                 month: 10,
                 year: 2017
             }
+        },
+        components: {
+            'calendar-day': CalendarDay
         },
         computed: {
           days() {
