@@ -1,6 +1,13 @@
 <template>
     <div>
         <p>{{ msg }}</p>
+        <p>Weeks!</p>
+        <div v-for="week in weeks">
+            Week!
+            <div v-for="day in week">{{ day }}</div>
+        </div>
+
+        <p>Days!</p>
         <div v-for="day in days">{{ day }}</div>
     </div>
 </template>
@@ -16,8 +23,15 @@
         },
         computed: {
           days() {
+
+              /* ******************************************** */
+              /* GENERATE ALL DAYS/DATES IN CURRENT MONTH */
               let days = []
-              let currentDay = this.$moment(`${this.year}-${this.month}-14`, 'YYYY-MM-DD')
+              let firstDayOfMonth = 1 //
+              let currentDay = this.$moment(`${this.year}-${this.month}-${firstDayOfMonth}`, 'YYYY-M-D')
+              // "2017-10-01T00:00:00.000Z"
+              // "2017-10-02T00:00:00.000Z" ... -> 31
+
 //              console.log('currentDay from git-go: ', currentDay)
               /* Yep.
                currentDay from git-go:  Object { _isAMomentObject: true, _i: "2017-10-14", _f: "YYYY-MM-DD", _isUTC: true, _pf: {…}, _locale: {…}, _a: […], _d: Date 2017-10-14T00:00:00.000Z, _isValid: true, _z: {…}, … } 126:22:13
@@ -59,7 +73,123 @@
                   // Oo la. "Zero-based month" "from 0 to 11" Add one, boys!
               } while ((currentDay.month() + 1 ) === this.month);
 
+              // Let us grab these two values right here right now while easy, convenient
+              // (Why? Because further along our days array gets more complicated by "Previous" and "Following" months days...)
+              let currentDayFirstCurrentMonth = this.$moment(days[0]) // FIRST DAY OF CURRENT MONTH (E.g. October 1st)
+              // IMPORTANT!  That wretched "- 1". Oy!
+              let currentDayLastCurrentMonth = this.$moment(days[days.length - 1]) // LAST DAY OF CURRENT MONTH (E.g. October 31st)
+              console.log('wtff currentDayLastCurrentMonth: ', currentDayLastCurrentMonth)
+              console.log('wtff days.length: ', days.length)
+              console.log('wtff days[days.length -1]: ', days[days.length - 1])
+              console.log('wtff currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day()) // Yes. 2. October 31, 2017 is a Tuesday. A 2. Bon.
+
+//              return days // stopgap script stopper thing
+
+              /* ******************************************** */
+              /* GENERATE NEEDED DAYS/DATES IN PREVIOUS MONTH */
+              // Back up days, till you get a MONDAY (!) :) (Our "First day of the week")
+              // Mind, your Current Month *may* have started on a Monday! (like May 2017)
+
+              // Grab "0th" day from current month (e.g. "October 1st")
+              // We use that Moment object as param to pass to "this.$moment()"
+
+              currentDay = this.$moment(days[0])
+              // AARRGGH.
+              // *MY* Calendar Week starts on a frickin' SUNDAY.
+              // *HIS* G.D. Calendar Week starts on frickin' *MONDAY* ("piece of junk American door...")
+              // console.log('currentDay for days[0] ... For MY October 1st, 2017 should be Sunday, a "0"  ', currentDay) // Yes. 0.
+              console.log('currentDay for days[0] ... For HIS October 1st, 2017 should still be Sunday, a "0"  ', currentDay) // Yes. 0.
+
+              // If it is '1', then the current month *starts* on a Monday!
+              // No need for "previous month" dates. Cheers
+              // E.g., MAY 2017 starts on a MONDAY
+              let dayOfWeekFirstDayOfCurrentMonth = currentDay.days()
+              console.log('dayOfWeekFirstDayOfCurrentMonth: ',  dayOfWeekFirstDayOfCurrentMonth)
+
+              const SUNDAY = 0
+              const MONDAY = 1
+
+//              if ( dayOfWeekFirstDayOfCurrentMonth !== 1 ) { // Current Month did not start on a Monday... 
+              if ( dayOfWeekFirstDayOfCurrentMonth !== MONDAY ) { // Current Month did not start on a Monday... 
+                  do {
+                      currentDay = this.$moment(currentDay).subtract(1, 'days')
+//                      days.push(currentDay)
+                      days.unshift(currentDay) // << Better. puts at FRONT of array. :)
+                      console.log('PREVIOUS MONTH - currentDay: ', currentDay) // Obj
+                      console.log('currentDay.day() : ', currentDay.day()) // e.g. 6 (0-based array of weekdays
+                      // Sunday is 0, Monday is 1 ... Saturday is 6.
+                      // ._locale._weekdays gets you "Sunday" etc.
+                      console.log('currentDay._locale._weekdays[currentDay.day()] : ', currentDay._locale._weekdays[currentDay.day()]) // e.g. Saturday
+                  } while (
+                      // Hah! Classic. I need this test in an IF, not in DO-WHILE.
+                      // Why? Because DO-WHILE will ALWAYS "DO" whatever it is, at least one time!! (Hah on you, WR__). Oy.
+//  No            dayOfWeekFirstDayOfCurrentMonth !== 1 // Current Month did not start on a Monday...
+//  No            &&
+
+//                  currentDay.day() !== 1) // 1 is Monday. Our Calendar mode has Monday as "first day of the week".
+                  currentDay.day() !== MONDAY) // 1 is Monday. Our Calendar mode has Monday as "first day of the week".
+
+                  /* LOOP THINKING:
+                   While this statement returns say a 3, or a 2, go ahead, "do" the loop:
+                   - On Wed. (a 3), do the loop (does subtraction, pushes a Tuesday onto the Array. good)
+                   - On Tues. (a 2), do the loop (does subtraction, pushes a Monday onto the Array. good)
+                   - When it is a Mon. (a 1), do *NOT* do the loop! - We don't want subtraction, we don't want a Sunday pushed onto the Array. We are DONE.
+                   */
+              }
+
+
+              /* ******************************************** */
+              /* GENERATE NEEDED DAYS/DATES IN FOLLOWING MONTH */
+              // Advance days, till you get a SUNDAY (!) :) (Our "Last day of the week")
+              // Mind, your Current Month *may* have ended on a Sunday! (like April 2017)
+
+// No:          let currentDay = this.days[days.length()] // LAST day in your current month // << Not using.
+               // currentDayLastCurrentMonth // << Instead we'll use this. I grabbed this above. It is e.g. October 31st.
+
+           //   let i = 0
+
+              // So long as current month does not END on a Sunday ... we'll do the loop
+              console.log('BEFORE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
+//              if (currentDayLastCurrentMonth.day() !== 0) { // 0 magic number for Sunday
+              if (currentDayLastCurrentMonth.day() !== SUNDAY) { // 0 magic number for Sunday
+                  console.log('INSIDE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
+                  currentDay = this.$moment(currentDayLastCurrentMonth) // Do *not* just whamma-jamma
+                  do {
+/* D'OH! *INFINITE LOOP* (Yeesh.)
+Do NOT declare a variable INSIDE your loop, son:
+                      let currentDay = currentDayLastCurrentMonth.add(1, 'days')
+*/
+/* Wrong.
+                      currentDay = currentDayLastCurrentMonth.add(1, 'days') // << No. Not it.
+*/
+/* Wrong! This way you got ALL the extra days in the following month as SAME 11-05-2017.
+Need to new create a NEW Moment.js object for each day!
+                      currentDay = currentDay.add(1, 'days') // << No, still not it.
+*/
+                      currentDay = this.$moment(currentDay).add(1, 'days') // << Mo' better.
+                      days.push(currentDay)
+                      console.log('INSIDE DO - currentDay.day(): ', currentDay.day())
+                    //  i++
+                  } while (
+                      //i < 15
+                  // &&
+//                  currentDay.day() !== 0 ) // loop till we bump into Sunday (0)
+                  currentDay.day() !== SUNDAY ) // loop till we bump into Sunday (0)
+              }
+
               return days
+            },
+            weeks() {
+                let weeks = []
+                let week = []
+                for (let day of this.days) {
+                    week.push(day)
+                    if (week.length === 7) { // filled with one week, 7 days
+                        weeks.push(week)
+                        week = [] // empty it back out
+                    }
+                }
+                return weeks
             }
         },
         created() {
