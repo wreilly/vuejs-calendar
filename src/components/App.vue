@@ -39,7 +39,25 @@
             'calendar-day': CalendarDay
         },
         computed: {
-          days() {
+            weeks() {
+                // One little note:
+                // This computed() property 'weeks()' depends on/uses
+                // the other computed() property 'days()'.
+                // And/but no it doesn't matter that you put 'weeks()' first
+                // in your code. Still works. "Ta-da."
+
+                let weeks = []
+                let week = []
+                for (let day of this.days) {
+                    week.push(day)
+                    if (week.length === 7) { // filled with one week, 7 days
+                        weeks.push(week)
+                        week = [] // empty it back out
+                    }
+                }
+                return weeks
+            },
+            days() {
 
               /* ******************************************** */
               /* GENERATE ALL DAYS/DATES IN CURRENT MONTH */
@@ -196,18 +214,6 @@ Need to new create a NEW Moment.js object for each day!
 
               return days
             },
-            weeks() {
-                let weeks = []
-                let week = []
-                for (let day of this.days) {
-                    week.push(day)
-                    if (week.length === 7) { // filled with one week, 7 days
-                        weeks.push(week)
-                        week = [] // empty it back out
-                    }
-                }
-                return weeks
-            }
         },
         created() {
 // Yep:            console.log('defined Property on VueJS bus for "this.$moment" is: ', this.$moment)
