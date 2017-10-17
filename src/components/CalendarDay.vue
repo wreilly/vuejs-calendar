@@ -27,6 +27,9 @@
                 // Stick this object into a div's *class* attribute...
                 // It carries Boolean T/F to say Yay/Nay to causing certain CSS classes to be applied.
 
+                // REMEMBER! (O la.) In Moment.js, MONTHS ARE ZERO-BASED. "+ 1" is your friend.
+                console.log('objectForCSSClasses ... (this.dayForCDay.month() + 1) ', (this.dayForCDay.month() + 1))
+
                 // Bit o' D.R.Y.-er code. We figure out "today" once, not multi times.
                 // 'today' is just Boolean: Yup or Nope
                 let today = this.dayForCDay.isSame(this.$moment(), 'day')
@@ -67,7 +70,14 @@
                     past: this.dayForCDay.isSameOrBefore(this.$moment(), 'day') && !today,
 
                     // color: $alto;
-                    'not-current-month': this.dayForCDay.month() !== this.$moment().month()
+                    // For INITIAL "CURRENT" MONTH (the month it actually is, now. e.g. October)
+                    //  you can simply use "this.$moment().month()"
+//                    'not-current-month': this.dayForCDay.month() !== this.$moment().month()
+
+                    // But for a "Current"/Display/Show-Me month of increment/decrement, (e.g. September, November...)
+                    //  you need to get "currentMonth" from Vuex Store. Works for good old October too.
+                    // REMEMBER! (O la.) In Moment.js, MONTHS ARE ZERO-BASED. "+ 1" is your friend.
+                    'not-current-month': (this.dayForCDay.month() + 1) !== this.$store.state.currentMonth // this.$moment().month()
                 }
             }
         }

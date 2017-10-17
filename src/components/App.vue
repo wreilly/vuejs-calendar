@@ -1,5 +1,13 @@
 <template>
     <div>
+        <div id="header">
+            <div>
+                <h3>Vue.js Calendar</h3>
+            </div>
+            <div>
+                <current-month></current-month>
+            </div>
+        </div>
         <div id="day-bar">
             <div>Mon</div>
             <div>Tue</div>
@@ -26,19 +34,35 @@
 
 <script>
     import CalendarDay from './CalendarDay.vue'
+    import CurrentMonth from './CurrentMonth.vue'
 
     export default {
         data() {
             return {
                 msg: 'Hello World from App.vue',
+                // Now with application-wide Vuex (below), replaces this component-specific data() {} here
+/*
                 month: 10,
                 year: 2017
+*/
             }
         },
         components: {
-            'calendar-day': CalendarDay
+            'calendar-day': CalendarDay,
+            'current-month': CurrentMonth
         },
         computed: {
+/* False alarm. *Not* supposed to comment these out. Sigh. << Yeah.
+  HAH! I HAD NOT "COMMENTED THESE THE **CK OUT"  << Wrong
+Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
+*/
+            month() {
+                // Now in application-wide Vuex, replaces component-specific data() {} above
+              return this.$store.state.currentMonth
+            },
+            year() {
+              return this.$store.state.currentYear
+            },
             weeks() {
                 // One little note:
                 // This computed() property 'weeks()' depends on/uses

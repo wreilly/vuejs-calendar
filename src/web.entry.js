@@ -3,6 +3,19 @@ import Vue from 'vue'
 // Sort of hard-coded bringing it in now; Webpack will be taking care of this, & Etc.
 import './style.scss'
 
+// LESSON 142 now in its own file ... /store/index.js ... LESSON 138 - VUEX!
+/*
+import Vuex from 'vuex'
+Vue.use(Vuex)
+*/
+
+// All 3 work:
+// import store from './store/index.js'
+// import store from './store/index'
+import store from './store'
+// console.log('store is ! ? ', store) // yeah, Vuex Store Object etc.
+// No: console.log(store.state.currentYear) // undefined
+
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC') // set default time on browser
 /*
@@ -48,5 +61,17 @@ new Vue({
      Interesting.
      */
     'my-app': App
+    },
+    store // << Newfangled ES6 grooviness
+    // store: store // << old-fashioned ES5
+
+    // VUEX STORE: LESSON 142
+/*  NOW in /store/index.js
+    store: {
+      state: {
+          currentYear: 2017,
+          currentMonth: 10
+      }
     }
+*/
 });
