@@ -1,7 +1,7 @@
 <template>
-    <div v-bind:class="objectForCSSClasses">
+    <div v-bind:class="objectForCSSClasses"
+         v-on:click="captureClick">
     <!--<div class="day">-->
-        <!--Here in CalendarDay component: -->
         {{ dayForCDay.format('D') }}
     </div>
 </template>
@@ -79,6 +79,33 @@
                     // REMEMBER! (O la.) In Moment.js, MONTHS ARE ZERO-BASED. "+ 1" is your friend.
                     'not-current-month': (this.dayForCDay.month() + 1) !== this.$store.state.currentMonth // this.$moment().month()
                 }
+            }
+        },
+        methods: {
+            captureClick(event) {
+                console.log(event)
+                this.$store.commit('eventFormActive', true)
+                console.log('event.clientY: ', event.clientY)
+                console.log('event.clientX: ', event.clientX)
+                this.$store.commit('assignClickPosY', event.clientY)
+                this.$store.commit('assignClickPosX', event.clientX)
+                /*
+                click
+                  clientX: 290 <<<<<
+                  clientY: 528 <<<<<
+                  layerX: 47
+                  layerY: 39
+                  movementX: 290
+                  movementY: 528
+                  offsetX: 0
+                  offsetY: 0
+                  pageX: 290
+                  pageY: 528
+                  screenX: 230
+                  screenY: 532
+                  x: 290
+                  y: 528
+                 */
             }
         }
     }
