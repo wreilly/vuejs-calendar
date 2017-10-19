@@ -100,7 +100,13 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
               /* Yep.
                currentDay from git-go:  Object { _isAMomentObject: true, _i: "2017-10-14", _f: "YYYY-MM-DD", _isUTC: true, _pf: {…}, _locale: {…}, _a: […], _d: Date 2017-10-14T00:00:00.000Z, _isValid: true, _z: {…}, … } 126:22:13
                */
-              console.log('this.$moment(currentDay) from git-go: ', this.$moment(currentDay))
+              /* Hmm. bit of oddness...
+              Saw different (off by one) date in Firefox vs. Chrome consoles. (!)
+               https://stackoverflow.com/questions/28126529/momentjs-internal-object-what-is-d-vs-i
+               "The moment internals have some quirks due to how the Date object works..."
+              */
+//                console.log('this.$moment(currentDay)._d from git-go: ', this.$moment(currentDay)._d)
+                console.log('this.$moment(currentDay).format(\'YYYY-MM-DD\') from git-go: ', this.$moment(currentDay).format('YYYY-MM-DD'))
               /* Yep.
                this.$moment(currentDay) from git-go:  Object { _isAMomentObject: true, _i: "2017-10-14", _f: "YYYY-MM-DD", _isUTC: true, _offset: -0, _pf: {…}, _locale: {…}, _z: {…}, _a: […], _d: Date 2017-10-14T00:00:00.000Z, … } 126:23:13
                */
@@ -143,9 +149,9 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
               // IMPORTANT!  That wretched "- 1". Oy!
               let currentDayLastCurrentMonth = this.$moment(days[days.length - 1]) // LAST DAY OF CURRENT MONTH (E.g. October 31st)
               console.log('wtff currentDayLastCurrentMonth: ', currentDayLastCurrentMonth)
-              console.log('wtff days.length: ', days.length)
-              console.log('wtff days[days.length -1]: ', days[days.length - 1])
-              console.log('wtff currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day()) // Yes. 2. October 31, 2017 is a Tuesday. A 2. Bon.
+//              console.log('wtff days.length: ', days.length)
+//              console.log('wtff days[days.length - 1]: ', days[days.length - 1])
+//              console.log('wtff currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day()) // Yes. 2. October 31, 2017 is a Tuesday. A 2. Bon.
 
 //              return days // stopgap script stopper thing
 
@@ -162,7 +168,7 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
               // *MY* Calendar Week starts on a frickin' SUNDAY.
               // *HIS* G.D. Calendar Week starts on frickin' *MONDAY* ("piece of junk American door...")
               // console.log('currentDay for days[0] ... For MY October 1st, 2017 should be Sunday, a "0"  ', currentDay) // Yes. 0.
-              console.log('currentDay for days[0] ... For HIS October 1st, 2017 should still be Sunday, a "0"  ', currentDay) // Yes. 0.
+//              console.log('currentDay for days[0] ... For HIS October 1st, 2017 should still be Sunday, a "0"  ', currentDay) // Yes. 0.
 
               // If it is '1', then the current month *starts* on a Monday!
               // No need for "previous month" dates. Cheers
@@ -179,11 +185,11 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
                       currentDay = this.$moment(currentDay).subtract(1, 'days')
 //                      days.push(currentDay)
                       days.unshift(currentDay) // << Better. puts at FRONT of array. :)
-                      console.log('PREVIOUS MONTH - currentDay: ', currentDay) // Obj
-                      console.log('currentDay.day() : ', currentDay.day()) // e.g. 6 (0-based array of weekdays
+                      console.log('PREVIOUS MONTH - currentDay._d: ', currentDay._d) // Obj
+//                      console.log('currentDay.day() : ', currentDay.day()) // e.g. 6 (0-based array of weekdays
                       // Sunday is 0, Monday is 1 ... Saturday is 6.
                       // ._locale._weekdays gets you "Sunday" etc.
-                      console.log('currentDay._locale._weekdays[currentDay.day()] : ', currentDay._locale._weekdays[currentDay.day()]) // e.g. Saturday
+//                      console.log('currentDay._locale._weekdays[currentDay.day()] : ', currentDay._locale._weekdays[currentDay.day()]) // e.g. Saturday
                   } while (
                       // Hah! Classic. I need this test in an IF, not in DO-WHILE.
                       // Why? Because DO-WHILE will ALWAYS "DO" whatever it is, at least one time!! (Hah on you, WR__). Oy.
@@ -213,10 +219,10 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
            //   let i = 0
 
               // So long as current month does not END on a Sunday ... we'll do the loop
-              console.log('BEFORE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
+//              console.log('BEFORE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
 //              if (currentDayLastCurrentMonth.day() !== 0) { // 0 magic number for Sunday
               if (currentDayLastCurrentMonth.day() !== SUNDAY) { // 0 magic number for Sunday
-                  console.log('INSIDE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
+//                  console.log('INSIDE IF - currentDayLastCurrentMonth.day(): ', currentDayLastCurrentMonth.day())
                   currentDay = this.$moment(currentDayLastCurrentMonth) // Do *not* just whamma-jamma
                   do {
 /* D'OH! *INFINITE LOOP* (Yeesh.)
@@ -232,7 +238,7 @@ Need to new create a NEW Moment.js object for each day!
 */
                       currentDay = this.$moment(currentDay).add(1, 'days') // << Mo' better.
                       days.push(currentDay)
-                      console.log('INSIDE DO - currentDay.day(): ', currentDay.day())
+                      console.log('FOLLOWING MONTH - currentDay._d: ', currentDay._d)
                     //  i++
                   } while (
                       //i < 15
