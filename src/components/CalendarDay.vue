@@ -23,6 +23,8 @@
 
        That 'day' data is generated in App.vue and passed down.
        Here in CalendarDay.vue I gave it the funny name 'dayForCDay'.
+
+       Also: we have "mockDataEvents" [] - each day can get multiple (or 1 or 0) events
      */
     export default {
         props: ['dayForCDay'],
@@ -85,6 +87,7 @@
                 }
             },
             events() {
+/*  Now to VUEX STORE:
                 let mockDataEvents = [
                     { description: 'yeah 0', wr__date: this.$moment().subtract(1, 'month') },
                     { description: 'yeah 1', wr__date: this.$moment() },
@@ -92,6 +95,10 @@
                     { description: 'yeah 2.A', wr__date: this.$moment().add(1, 'day') },
                     { description: 'yeah 3', wr__date: this.$moment().add(10, 'day') }
                 ]
+*/
+
+                let mockDataEvents = this.$store.state.mockDataEventsFromStore // whamma ?
+
 //                return mockDataEvents
 //                console.log('mockDataEvents[0].wr__date.format(\'YYYY-MM-DD\') ', mockDataEvents[0].wr__date.format('YYYY-MM-DD')) // Yes Oct 17 (today)
 //                console.log('this.dayForCDay.format(\'YYYY-MM-DD\') ', this.dayForCDay.format('YYYY-MM-DD')) // okay, shows each day ...
@@ -207,6 +214,7 @@ Kind of fix: 1) don't log things twice.
             captureClick(event) {
                 console.log(event)
                 this.$store.commit('eventFormActive', true)
+                this.$store.commit('captureEventCalendarDay', this.dayForCDay)
                 console.log('event.clientY: ', event.clientY)
                 console.log('event.clientX: ', event.clientX)
                 this.$store.commit('assignClickPosY', event.clientY)

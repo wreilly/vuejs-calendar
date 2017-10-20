@@ -30,7 +30,17 @@
             -->
         </div>
         <event-form>
+            <!-- (Same note posted to EventForm.vue)
 
+N.B. This EventForm.vue Component is sort of "ghostly" ...
+
+- It is "included" via the <template> for App.vue.
+ -- As you can see, it has no props nor anything here.
+- Its appearance (or not) in the DOM (and on the page) is dictated by the CSS class 'active' (true or false).
+- Also, its position is driven by X, Y coords captured upon click in any given CalendarDay.vue component.
+
+Cheers.
+-->
         </event-form>
     </div>
 </template>
@@ -57,8 +67,9 @@
             'event-form': EventForm
         },
         computed: {
-/* False alarm. *Not* supposed to comment these out. Sigh. << Yeah.
-  HAH! I HAD NOT "COMMENTED THESE THE **CK OUT"  << Wrong
+/* False alarm. *Not* supposed to comment these out (month() year() etc.). Sigh. << Yeah.
+
+  Wrong>> HAH! I HAD NOT "COMMENTED THESE THE **CK OUT"  << Wrong
 Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
 */
             month() {
@@ -155,6 +166,9 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
 
 //              return days // stopgap script stopper thing
 
+
+
+
               /* ******************************************** */
               /* GENERATE NEEDED DAYS/DATES IN PREVIOUS MONTH */
               // Back up days, till you get a MONDAY (!) :) (Our "First day of the week")
@@ -206,6 +220,9 @@ Yeesh.  Were conflicting with same definitions in new CurrentMonth.vue. << Wrong
                    - When it is a Mon. (a 1), do *NOT* do the loop! - We don't want subtraction, we don't want a Sunday pushed onto the Array. We are DONE.
                    */
               }
+
+
+
 
 
               /* ******************************************** */
