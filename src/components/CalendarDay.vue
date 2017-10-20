@@ -213,29 +213,33 @@ Kind of fix: 1) don't log things twice.
         methods: {
             captureClick(event) {
                 console.log(event)
-                this.$store.commit('eventFormActive', true)
-                this.$store.commit('captureEventCalendarDay', this.dayForCDay)
-                console.log('event.clientY: ', event.clientY)
-                console.log('event.clientX: ', event.clientX)
-                this.$store.commit('assignClickPosY', event.clientY)
-                this.$store.commit('assignClickPosX', event.clientX)
-                /*
-                click
-                  clientX: 290 <<<<<
-                  clientY: 528 <<<<<
-                  layerX: 47
-                  layerY: 39
-                  movementX: 290
-                  movementY: 528
-                  offsetX: 0
-                  offsetY: 0
-                  pageX: 290
-                  pageY: 528
-                  screenX: 230
-                  screenY: 532
-                  x: 290
-                  y: 528
-                 */
+                if (this.$store.state.eventFormActiveBool) {
+                    // If already active (true), let's NOT allow a click to move the modal dialog over to some other date ... Nah.
+                } else { // Good to go
+                    this.$store.commit('eventFormActive', true)
+                    this.$store.commit('captureEventCalendarDay', this.dayForCDay)
+                    console.log('event.clientY: ', event.clientY)
+                    console.log('event.clientX: ', event.clientX)
+                    this.$store.commit('assignClickPosY', event.clientY)
+                    this.$store.commit('assignClickPosX', event.clientX)
+                    /*
+                     click
+                     clientX: 290 <<<<<
+                     clientY: 528 <<<<<
+                     layerX: 47
+                     layerY: 39
+                     movementX: 290
+                     movementY: 528
+                     offsetX: 0
+                     offsetY: 0
+                     pageX: 290
+                     pageY: 528
+                     screenX: 230
+                     screenY: 532
+                     x: 290
+                     y: 528
+                     */
+                }
             }
         }
     }

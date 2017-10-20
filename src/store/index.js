@@ -25,7 +25,17 @@ export default new Vuex.Store({
             eventFormPosY: 450,
             eventFormPosX: 50,
             eventFormActiveBool: false,
-            eventCalendarDay: {}, // Worked: >> '', // Worked: >> null, // Worked: >> {}, // will be Moment object
+            /* Interesting.
+            Initial default value for this property.
+             // will be Moment object
+            I tried several things, all seemed to work okay.
+            BUT, it was only when I tried to use .format() on the result of this, over in EventForm.vue, that I discovered that the only one that works right is:
+            - moment()  << Yep.
+            Makes sense.
+            The others were:
+             // Worked: >> '', // Worked: >> null, // Worked: >> {},
+             */
+            eventCalendarDay: moment(),
             mockDataEventsFromStore:  [ // was in CalendarDay.vue, mocked up
                 // { description: 'yeah 0', wr__date: this.$moment().subtract(1, 'month') },
                 { description: 'yeah 0', wr__date: moment().subtract(1, 'month') }, // get rid of "this.$"

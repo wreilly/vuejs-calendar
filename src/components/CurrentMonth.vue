@@ -65,6 +65,8 @@
                 } else {
                     this.$store.commit('setCurrentMonth', this.month - 1) // simple digit subtraction; not "Moment" stuff
                 }
+                // To close the Add Event modal dialog, if you shift month:
+                this.close()
             },
             inc() {
                 console.log('inc baby!')
@@ -74,7 +76,9 @@
                     this.$store.commit('setCurrentYear', this.year + 1)
                 } else {
                         this.$store.commit('setCurrentMonth', this.month + 1) // simple digit subtraction; not "Moment" stuff            }
-                    }
+                }
+                // To close the Add Event modal dialog, if you shift month:
+                this.close()
             },
             todayMonth() {
                 console.log('this.$store.state.currentMonth ', this.$store.state.currentMonth )
@@ -86,7 +90,20 @@
                 // Hmm. Once again - ZERO-BASED Months. "+ 1 is your friend"
                 this.$store.commit('setCurrentMonth', (this.$moment().month() + 1))
                 this.$store.commit('setCurrentYear', this.$moment().year())
-            }
+                // To close the Add Event modal dialog, if you shift month:
+                this.close()
+            },
+            close() { // Modal eventForm dialog
+                this.$store.commit('eventFormActive', false)
+                /* The next line does NOT clear the description data property, over on the EventForm.vue component.
+                Sorry!
+
+                TODO Hmm. If I bother to put that description into the Store, I can clear it from here.
+                Is there another way? Hmm.
+                Put the damned thing on a bus? ugh.
+                */
+                this.description = '' // re-clear it << Nope.
+            },
         },
         computed: {
             currentMonthYearFormattedHere() {

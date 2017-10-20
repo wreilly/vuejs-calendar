@@ -23,6 +23,9 @@
 
         <h4>Add an event</h4>
         <div class="text">
+            <!--<div>{{ dayForCDayEventFormComputed }}</div>-->
+            <!--<div>{{ dayForCDayEventFormComputed.format('YYYY MM DD') }}</div>-->
+            <div>{{ dayForCDayEventFormComputed.format('dddd, MMM Do') }}</div>
 
             <!-- Ye Olde Syntactic Sugar:
             https://vuejs.org/v2/guide/components.html#Form-Input-Components-using-Custom-Events
@@ -54,7 +57,12 @@ https://vuejs.org/v2/guide/components.html#Passing-Data-with-Props
 "Similar to binding a normal attribute to an expression, we can also use v-bind for dynamically binding props to data on the parent. ..."
             -->
 
-            <input type="text" v-bind:value="description" v-on:input="description = $event.target.value" />
+            <input type="text"
+                   v-bind:value="description"
+                   v-on:input="description = $event.target.value"
+                   placeholder="Wild asparagus picking"
+                   v-my-focus
+                   v-on:keyup.enter="saveMyEvent"/>
         </div>
         <div class="buttons">
             <button type="submit" v-on:click="saveMyEvent">Save</button>
@@ -83,7 +91,7 @@ A "v-bind:style" wants JavaScript object, so:
     export default {
         data() {
             return {
-                description: 'defscript'
+                description: '' // 'default description'
             }
         },
         computed: {
@@ -107,12 +115,27 @@ A "v-bind:style" wants JavaScript object, so:
         methods: {
             close() {
                 this.$store.commit('eventFormActive', false)
+                this.description = '' // re-clear it
             },
             saveMyEvent() {
-                this.$store.commit('saveMyEventAction', {
-                    description: this.description,
-                    wr__date: this.dayForCDayEventFormComputed
-                })
+                if (this.description === '') {
+//                    gotta write something
+                } else { // Good to go
+                    this.$store.commit('saveMyEventAction', {
+                        description: this.description,
+                        wr__date: this.dayForCDayEventFormComputed
+                    })
+                    this.close()
+                }
+            }
+        },
+        directives: {
+            'my-focus': {
+                update(el) {
+                    console.log('v-MyFocus ? el.value ', el.value)
+//                    console.debug('v-MyFocus ? el.value ', el.value)
+                    el.focus()
+                }
             }
         }
     }
