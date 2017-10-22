@@ -94,15 +94,32 @@
                 this.close()
             },
             close() { // Modal eventForm dialog
+                /* ****************************** */
                 this.$store.commit('eventFormActive', false)
-                /* The next line does NOT clear the description data property, over on the EventForm.vue component.
+
+
+                /* ****************************** */
+                this.$store.commit('descriptionSet', '') // Clear it in Store, yah? YAH!
+                /* NOW: this does finally work. Happy October 22, 2017.
+                OLD: The next line does NOT clear the description data property, over on the EventForm.vue component.
                 Sorry!
 
-                TODO Hmm. If I bother to put that description into the Store, I can clear it from here.
+                TODO ->DONE<- Hmm. If I bother to put that description into the Store, I can clear it from here.
                 Is there another way? Hmm.
                 Put the damned thing on a bus? ugh.
                 */
+                // 2) TODO ->DONE<- move description clearing to Vuex, too
+                // (Same Comment over in EventForm.vue)
+                // Why? Because here in CurrentMonth, if you click 'inc' or 'dec',
+                // and your Add Event modal popup is open,
+                // with some text in the Description field,
+                // that same text will appear if you click a day in the new month you just
+                // navigated to.
+                // We wish to clear this description thing, over in EventForm. Need Store for that.
+
+/* Nope.
                 this.description = '' // re-clear it << Nope.
+*/
             },
         },
         computed: {

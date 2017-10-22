@@ -134,6 +134,11 @@ body {
             background-color: $buttermilk;
           }
 
+          // WR__ LESSON 158
+          &.highlightEventCalendarDay {
+            background-color: $pink;
+          }
+
           &.active {
             background-color: $pink;
           }

@@ -18,6 +18,8 @@ moment.tz.setDefault('UTC') // set default time on browser
 // Solution: Don't use it! Drop it off those lines below referencing $moment off of 'this.' So simple. Who knew.
 
 export default new Vuex.Store({
+    strict: true, // ?? https://ypereirareis.github.io/blog/2017/04/25/vuejs-two-way-data-binding-state-management-vuex-strict-mode/
+
     // store: { // << DUMKOPPF! No need for "store: {}" wrapper around!!! (o la)
         state: {
             currentYear: 2017,
@@ -25,12 +27,17 @@ export default new Vuex.Store({
             eventFormPosY: 450,
             eventFormPosX: 50,
             eventFormActiveBool: false,
+
+            description: '', //'hi desc from store', // Event text ... Set from EventForm; cleared by CurrentMonth
+
+            highlightEventCalendarDayBool: false, // user clicks to add event, highlight that day e.g. pink
+
             /* Interesting.
-            Initial default value for this property.
+            Initial default value for this property: eventCalendarDay
              // will be Moment object
-            I tried several things, all seemed to work okay.
+            I tried several things as default value, all seemed to work okay.
             BUT, it was only when I tried to use .format() on the result of this, over in EventForm.vue, that I discovered that the only one that works right is:
-            - moment()  << Yep.
+            = moment()  << Yep.
             Makes sense.
             The others were:
              // Worked: >> '', // Worked: >> null, // Worked: >> {},
@@ -64,8 +71,14 @@ export default new Vuex.Store({
             eventFormActive(state, payload) {
                 state.eventFormActiveBool = payload //whamma-jamma (comme d'habitude)
             },
+            highlightEventCalendarDay(state, payload) {
+              state.highlightEventCalendarDayBool = payload // boolean
+            },
             captureEventCalendarDay(state, payload) {
                 state.eventCalendarDay = payload // dayForCDay
+            },
+            descriptionSet(state, payload) {
+                state.description = payload
             },
             saveMyEventAction(state, payload) {
                 state.mockDataEventsFromStore.push( payload
@@ -101,7 +114,7 @@ Instructor Code approach, by comparison:
 
 */
                 )
-            }
-        }
+            } // /SaveMyEventAction()
+        } // /mutations: {}
     // } // << DUMKOPPF! No need for "store: {}" wrapper around!!! (o la)
 })

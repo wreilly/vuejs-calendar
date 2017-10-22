@@ -28,6 +28,21 @@
      */
     export default {
         props: ['dayForCDay'],
+        data() {
+            return {
+
+                // When user clicks on a day, to add an event, highlight it e.g. pink
+                // 1) TODO ->DONE<- Store ... for highlightEventCalendarDay
+                /* Moved from here in data() {} over to Vuex Store
+                 It did work here to apply the highlight (pink)...
+                 But did NOT work from here, to CLEAR that highlight (over from EventForm)
+                 Needed to be moved to Vuex Store to accomplish that. Bon.
+                */
+/* No longer used here. See Vuex Store.
+                 highlightEventCalendarDay: false
+*/
+            }
+        },
         computed: {
             objectForCSSClasses() {
                 // Stick this object into a div's *class* attribute...
@@ -39,6 +54,24 @@
                 // Bit o' D.R.Y.-er code. We figure out "today" once, not multi times.
                 // 'today' is just Boolean: Yup or Nope
                 let today = this.dayForCDay.isSame(this.$moment(), 'day')
+
+
+                // Highlight Add Event day upon click ...
+                // IF: 1) the calendar day being processed IS SAME AS the Store's "Event" day (just got clicked-on day)
+                // AND IF: 2) the "Highlight" it (pink) is set to 'true' over in the store (because there was just a click)
+                // THEN, yeah, for  THIS CalendarDay, let's Make It Pink
+                // N.B., when that "Highlight" it over in the store goes to 'false' (close()), it'll turn off. Bueno, no?
+
+//                console.log('%%%%%%%%% -01- this.dayForCDay.format(\'YYYY MM DD\') ', this.dayForCDay.format('YYYY MM DD'))
+//                console.log('%%%%%%%%% -02- this.$store.state.eventCalendarDay.format(\'YYYY MM DD\') ', this.$store.state.eventCalendarDay.format('YYYY MM DD'))
+//                console.log('%%%%%%%%% -03- this.dayForCDay.isSame(this.$store.state.eventCalendarDay, \'day\') ', this.dayForCDay.isSame(this.$store.state.eventCalendarDay, 'day'))
+
+                let highlightEventCalendarDay =
+                    this.dayForCDay.isSame(this.$store.state.eventCalendarDay, 'day')
+                    &&
+                    this.$store.state.highlightEventCalendarDayBool
+
+//                console.log('%%%%%%%%% -04- ergo, highlightEventCalendarDay is:  ? ', highlightEventCalendarDay) // This logic is working right. Hmm. What else is going on?
 
                 return {
                     // ALL the divs that hold a "day" should get the CSS class 'day'
@@ -52,6 +85,17 @@
 */
                     // On left: class name. On right: Boolean var (See above)
                     today: today,
+
+                    // Here, a 2nd pass at seeing whether the CSS class 'today'
+                    // should be applied. (If user clicks, to add event, is true)
+/* NO! Don't reach into the Store right here.
+You did the logic test ABOVE. USE THAT.
+On this next line, as in the "today: today" line above: "On left: class name. On right: Boolean var (See above).
+Sheesh
+
+// NO! >>            highlightEventCalendarDay: this.$store.state.highlightEventCalendarDayBool,
+*/
+                    highlightEventCalendarDay: highlightEventCalendarDay, // << Yes.
 
                     // PAST days ... (cain't get there no mo') = opacity: 0.6;
                     // TAKE ONE: Seems to work okay... however...
@@ -218,6 +262,11 @@ Kind of fix: 1) don't log things twice.
                 } else { // Good to go
                     this.$store.commit('eventFormActive', true)
                     this.$store.commit('captureEventCalendarDay', this.dayForCDay)
+
+                    // Apply a CSS "highlight" (e.g. pink) style
+                    // for the date the user clicked to add an event
+                    this.$store.commit('highlightEventCalendarDay', true)
+
                     console.log('event.clientY: ', event.clientY)
                     console.log('event.clientX: ', event.clientX)
                     this.$store.commit('assignClickPosY', event.clientY)
