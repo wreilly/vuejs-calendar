@@ -19,6 +19,28 @@ app.get('/', (req, res) => {
 
 });
 
+// LESSON 159
+let eventsOnServer = []
+
+app.use(require('body-parser').json())
+
+app.post('/add_event', (req, res) => {
+    console.log('received ! req.body: ', req.body)
+    /*
+    E.g. { description: 'oh come on!',
+     wr__date: '2017-10-17T00:00:00.000Z' }
+     */
+    eventsOnServer.push(req.body)
+    console.log('eventsOnServer is now: ', eventsOnServer)
+    /*
+     received ! req.body:  { description: 'is here', wr__date: '2017-10-27T00:00:00.000Z' }
+     eventsOnServer is now:  [ { description: 'nobody', wr__date: '2017-10-24T00:00:00.000Z' },
+     { description: 'is here', wr__date: '2017-10-27T00:00:00.000Z' } ]
+     */
+
+    res.sendStatus(200)
+})
+
 const server = http.createServer(app);
 
 if (process.env.NODE_ENV === 'development') {

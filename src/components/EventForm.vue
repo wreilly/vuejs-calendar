@@ -251,10 +251,20 @@ A "v-bind:style" wants JavaScript object, so:
                     console.log('saveMyEvent empty description = no go ...')
                 } else { // Good to go
                 console.log('hey, guys, what is (where is?) this.descriptionInStoreComputed, huh? ', this.descriptionInStoreComputed)
+
+                    // LESSON 162 ACTION NOW
+                    this.$store.dispatch('addEventAction',  {
+                        description: this.descriptionInStoreComputed,
+                        wr__date: this.dayForCDayEventFormComputed
+                    })
+
+/*
+                    // WAS: DIRECT MUTATION
                     this.$store.commit('saveMyEventAction', {
                         description: this.descriptionInStoreComputed,
                         wr__date: this.dayForCDayEventFormComputed
                     })
+*/
                     this.close()
                 }
             }

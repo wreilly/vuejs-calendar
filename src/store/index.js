@@ -12,10 +12,17 @@ Vue.use(Vuex)
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC') // set default time on browser
 
-// Seems odd. I thought 'this' was omni/always-present, and all that jazz. Huh.
+// Seems odd. I thought that good old JavaScript 'this' was
+// omni/always-present, and all that jazz. Huh.
 // Might have been difficile to know just *what* 'this' is/was, but I didn't expect it to just Not Be There. Hmmph.
 // console.log('this in Store is ? ', this) // undefined. Hmm!
 // Solution: Don't use it! Drop it off those lines below referencing $moment off of 'this.' So simple. Who knew.
+// So: instead of this.$moment, just moment
+
+// LESSON 159
+import Axios from 'axios'
+// Vue ServerSide Rendering does NOT work with Vue-Resource.
+// One reason we go with Axios instead. Cheers.
 
 export default new Vuex.Store({
     strict: true, // ?? https://ypereirareis.github.io/blog/2017/04/25/vuejs-two-way-data-binding-state-management-vuex-strict-mode/
@@ -30,7 +37,7 @@ export default new Vuex.Store({
 
             description: '', //'hi desc from store', // Event text ... Set from EventForm; cleared by CurrentMonth
 
-            highlightEventCalendarDayBool: false, // user clicks to add event, highlight that day e.g. pink
+            highlightEventCalendarDayBool: false, // Concept of "active" - has the user clicked here, on this day, to add event? If so, we'll say true and highlight that day e.g. pink
 
             /* Interesting.
             Initial default value for this property: eventCalendarDay
@@ -81,12 +88,23 @@ export default new Vuex.Store({
                 state.description = payload
             },
             saveMyEventAction(state, payload) {
+                console.log('payload receieved is ', payload)
+                /*
+                 payload receieved is
+                 Object { description: "lopllop", wr__date: {…} }
+                 */
+
+                let objEvent = payload // our payload is already an object
+                // we use above for the Axios call, below
+
                 state.mockDataEventsFromStore.push( payload
-/* Not this. The payload is already an object thing.
+/* Not this:
                     {
                     description: payload,
                     wr__date: eventCalendarDay
                 }
+Why?
+Because our payload is already an object thing.
 
 Instructor Code approach, by comparison:
 1. My WR__ code does:
@@ -113,8 +131,51 @@ Instructor Code approach, by comparison:
 
 
 */
-                )
+                ) // /.push()
+
+                // LESSON 159  AXIOS - to server
+                console.log('objEvent payload thing is: ', objEvent)
+                /*
+                Huh. Is this what I expected?
+                 objEvent payload thing is:
+                 {…}
+                 __ob__: Object { value: {…}, dep: {…}, vmCount: 0 }
+                 description: Getter & Setter
+                 <get>: function reactiveGetter()
+                 <set>: function reactiveSetter()
+                 wr__date: Getter & Setter ...
+                 */
+
+                Axios.post('/add_event', objEvent)
+                // objEvent is just the payload...
+
             } // /SaveMyEventAction()
-        } // /mutations: {}
+        }, // /mutations: {}
+    actions: {
+
+        /*
+        In Vuex, ACTIONS get *CONTEXT* (ah-hah!)
+        Context is basically our Store.
+         */
+
+        addEventAction(context, payload) {
+            // refatored from mutation saveMyEventAction << oo! bad name!!
+            console.log('action context is: ', context)
+            /*
+             action context is:
+             {…}
+             commit: function boundCommit()
+             dispatch: function boundDispatch()
+             getters: Object {  }
+             rootGetters: Object {  }
+             rootState: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
+             state: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
+             */
+
+            // Next line commits the Mutation (with bad name)
+            context.commit('saveMyEventAction', payload)
+
+        }
+    } // /actions: {}
     // } // << DUMKOPPF! No need for "store: {}" wrapper around!!! (o la)
 })
