@@ -87,15 +87,13 @@ export default new Vuex.Store({
             descriptionSet(state, payload) {
                 state.description = payload
             },
-            saveMyEventAction(state, payload) {
-                console.log('payload receieved is ', payload)
+            saveMyEventMutation(state, payload) {
+                console.log('MUTATION payload receieved is ', payload)
                 /*
                  payload receieved is
                  Object { description: "lopllop", wr__date: {…} }
                  */
 
-                let objEvent = payload // our payload is already an object
-                // we use above for the Axios call, below
 
                 state.mockDataEventsFromStore.push( payload
 /* Not this:
@@ -119,7 +117,7 @@ Instructor Code approach, by comparison:
  - (DIFFERS) send only the Event Description text as the payload (String)
  - (DIFFERS) get that date directly from right here in the Store to add to the Event being pushed onto the Array
 
- addEvent(state, payload) {  // << My WR__ 'saveMyEventAction()'
+ addEvent(state, payload) {  // << My WR__ 'saveMyEventMutation()'
    state.events.push({
      description: payload,
      date: state.eventFormDate
@@ -133,23 +131,8 @@ Instructor Code approach, by comparison:
 */
                 ) // /.push()
 
-                // LESSON 159  AXIOS - to server
-                console.log('objEvent payload thing is: ', objEvent)
-                /*
-                Huh. Is this what I expected?
-                 objEvent payload thing is:
-                 {…}
-                 __ob__: Object { value: {…}, dep: {…}, vmCount: 0 }
-                 description: Getter & Setter
-                 <get>: function reactiveGetter()
-                 <set>: function reactiveSetter()
-                 wr__date: Getter & Setter ...
-                 */
 
-                Axios.post('/add_event', objEvent)
-                // objEvent is just the payload...
-
-            } // /SaveMyEventAction()
+            } // /SaveMyEventMutation()
         }, // /mutations: {}
     actions: {
 
@@ -159,23 +142,67 @@ Instructor Code approach, by comparison:
          */
 
         addEventAction(context, payload) {
-            // refatored from mutation saveMyEventAction << oo! bad name!!
-            console.log('action context is: ', context)
-            /*
-             action context is:
-             {…}
-             commit: function boundCommit()
-             dispatch: function boundDispatch()
-             getters: Object {  }
-             rootGetters: Object {  }
-             rootState: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
-             state: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
-             */
+            // LESSON 163 = Putting PROMISE around whole thing:
 
-            // Next line commits the Mutation (with bad name)
-            context.commit('saveMyEventAction', payload)
+            return new Promise((resolve, reject) => {
+                // refactored from mutation saveMyEventMutation << I improved this name (was "Action" now "Mutation" Bon.)
+                console.log('ACTION payload receieved is ', payload)
+                console.log('action context is: ', context)
+                /*
+                 action context is:
+                 {…}
+                 commit: function boundCommit()
+                 dispatch: function boundDispatch()
+                 getters: Object {  }
+                 rootGetters: Object {  }
+                 rootState: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
+                 state: Object { currentYear: Getter & Setter, currentMonth: Getter & Setter, eventFormPosY: Getter & Setter, … }
+                 */
 
-        }
+                // Next line commits the Mutation (with now improved name)
+                // BEFORE Axios, we just committed mutation right here.
+                // NOW we do not do commit till we get back '200 OK' from Axios POST
+//            context.commit('saveMyEventMutation', payload)
+
+                // LESSON 159  AXIOS - to server
+                // N.B. Do this ASYNC stuff HERE in *Action*, not where I had it, in Mutation. tsk tsk no.
+
+                let objEvent = payload // our payload is already an object (whereas for Instructor it is just a String)
+                // We'll use this 'objEvent' for the Axios call, below
+
+                console.log('objEvent payload thing is: ', objEvent)
+                /*
+                 Huh. Is this what I expected?
+                 objEvent payload thing is:
+                 {…}
+                 __ob__: Object { value: {…}, dep: {…}, vmCount: 0 }
+                 description: Getter & Setter
+                 <get>: function reactiveGetter()
+                 <set>: function reactiveSetter()
+                 wr__date: Getter & Setter ...
+                 */
+
+                // LESSON 163 PROMISE...
+                Axios.post('/add_event', objEvent) // objEvent is just the payload...
+                    .then(response => {
+                        // console.log(response) // yep
+                        if(response.status === 200){
+                            context.commit('saveMyEventMutation', objEvent)
+
+/*
+                            /!* ARTIFICIALLY SLOW DOWN THE SERVER RESPONSE *!/
+                            setTimeout(function() {
+                                resolve()
+                            }, 2500)
+*/
+
+                            resolve()
+                        } else { // TODO Error handling ...
+                            reject()
+                        }
+                    })
+            }) // /PROMISE
+        } // /addEventAction   (returns a Promise)  see EventForm.vue
     } // /actions: {}
     // } // << DUMKOPPF! No need for "store: {}" wrapper around!!! (o la)
 })

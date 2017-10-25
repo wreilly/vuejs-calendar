@@ -253,19 +253,27 @@ A "v-bind:style" wants JavaScript object, so:
                 console.log('hey, guys, what is (where is?) this.descriptionInStoreComputed, huh? ', this.descriptionInStoreComputed)
 
                     // LESSON 162 ACTION NOW
+                    // LESSON 163 PROMISE is now returned by this Action...  chain a .then() onto it:
                     this.$store.dispatch('addEventAction',  {
                         description: this.descriptionInStoreComputed,
                         wr__date: this.dayForCDayEventFormComputed
                     })
+                        .then(_ => {
+                            // NOW we don't run close() till we get back from Async Axios Promise
+                            this.close()
+                        })
 
 /*
                     // WAS: DIRECT MUTATION
-                    this.$store.commit('saveMyEventAction', {
+                    this.$store.commit('saveMyEventMutation', {
                         description: this.descriptionInStoreComputed,
                         wr__date: this.dayForCDayEventFormComputed
                     })
 */
-                    this.close()
+
+// We used to run close() at end of this method simply.
+// Now instead above we await Promise return of success to do so. Cheers.
+//                    this.close()
                 }
             }
         },
