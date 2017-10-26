@@ -51,14 +51,18 @@ export default new Vuex.Store({
              */
             eventCalendarDay: moment(),
             mockDataEventsFromStore:  [ // was in CalendarDay.vue, mocked up
+// LESSON 164 Now refactored to "initialState" over in WEB.ENTRY.JS
+/*
                 // { description: 'yeah 0', wr__date: this.$moment().subtract(1, 'month') },
-                { description: 'yeah 0', wr__date: moment().subtract(1, 'month') }, // get rid of "this.$"
+                { description: 'yeah 0', wr__date: moment().subtract(1, 'month') },
+                // get rid of "this.$"
                 // Error encountered:
                 // "TypeError: Cannot read property '$moment' of undefined"
                 { description: 'yeah 1', wr__date: moment() },
                 { description: 'yeah 2', wr__date: moment().add(1, 'day') },
                 { description: 'yeah 2.A', wr__date: moment().add(1, 'day') },
                 { description: 'yeah 3', wr__date: moment().add(10, 'day') }
+*/
             ]
         },
         mutations: {
@@ -95,8 +99,23 @@ export default new Vuex.Store({
                  */
 
 
+/*
                 state.mockDataEventsFromStore.push( payload
-/* Not this:
+*/
+/*
+// LESSON 164:
+                state.mockDataEventsFromInitialState.push( payload
+*/
+/*
+// LESSON 165:
+                state.mockDataEventsFromGlobalVar.push( payload
+*/
+
+// LESSON 165:PART 2 ...
+                state.mockDataEventsAsMomentObjectsFromGlobalVar.push( payload
+
+
+                    /* Not this:
                     {
                     description: payload,
                     wr__date: eventCalendarDay

@@ -141,7 +141,21 @@ Sheesh
                 ]
 */
 
+/*
                 let mockDataEvents = this.$store.state.mockDataEventsFromStore // whamma ?
+*/
+/*
+                // LESSON 164 now in WEB.ENTRY.JS as "initialState"
+               let mockDataEvents = this.$store.state.mockDataEventsFromInitialState
+*/
+/*
+// LESSON 165:
+                let mockDataEvents = this.$store.state.mockDataEventsFromGlobalVar
+*/
+
+// LESSON 165: Part 2 ...
+                let mockDataEvents = this.$store.state.mockDataEventsAsMomentObjectsFromGlobalVar
+
 
 //                return mockDataEvents
 //                console.log('mockDataEvents[0].wr__date.format(\'YYYY-MM-DD\') ', mockDataEvents[0].wr__date.format('YYYY-MM-DD')) // Yes Oct 17 (today)

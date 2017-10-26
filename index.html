@@ -11,6 +11,27 @@
     <div id="app">
         <my-app></my-app>
     </div>
+    <script>
+/*
+        <!-- LESSON 165
+        Create a GLOBAL variable, for our Events
+        See web.entry.js -->
+*/
+        var __INITIAL_STATE__ = [
+            // As-is, these need the Moment.JS ... So we fudge it instead for this little POC (Proof Of Concept) : and we JUST USE STRINGS for "Dates"
+
+//            { description: 'yeah 0', wr__date: moment().subtract(1, 'month') },
+//            { description: 'yeah 1', wr__date: moment() },
+//            { description: 'yeah 2', wr__date: moment().add(1, 'day') },
+//            { description: 'yeah 2.A', wr__date: moment().add(1, 'day') },
+//            { description: 'yeah 3', wr__date: moment().add(10, 'day') }
+            { description: 'yeah 0', wr__date: "2017-10-13T00:00:00.000Z" },
+            { description: 'yeah 1', wr__date: "2017-10-13T00:09:00.000Z" },
+            { description: 'yeah 2', wr__date: "2017-10-14T00:00:00.000Z" },
+            { description: 'yeah 2.A', wr__date: "2017-09-23T00:00:00.000Z" },
+            { description: 'yeah 3', wr__date: "2017-10-30T00:00:00.000Z" }
+        ];
+    </script>
     <script src="/dist/web.bundle.js"></script>
 </body>
 </html>
