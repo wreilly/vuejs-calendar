@@ -99,6 +99,23 @@ export default new Vuex.Store({
                  */
 
 
+                /* Hmm. Thought I was done. (2017-10-27)
+                 My "state" above DOES have an entry for:
+                 - mockDataEventsFromStore
+
+                 But, my "state" above has NO ENTRY for:
+                - mockDataEventsFromInitialState
+                - mockDataEventsFromGlobalVar
+                - mockDataEventsAsMomentObjectsFromGlobalVar
+
+                Q. So - why (the H___) don't these next lines hit AN ERROR ??? ???
+                A. Nope: I guess (MBU) my code (below) can simply ADD a new thingie (technical term) TO the state, dynamically, and all that jazz. Hmm. ??
+                A.2. Yep: Look at the WEB.ENTRY.JS file! We REWRITE the state there, ADDING that mockDataEventsAsMomentObjectsFromGlobalVar
+
+                 */
+                console.log('state ', state)
+                console.log('state.mockDataEventsAsMomentObjectsFromGlobalVar: ', state.mockDataEventsAsMomentObjectsFromGlobalVar)
+
 /*
                 state.mockDataEventsFromStore.push( payload
 */
@@ -112,6 +129,12 @@ export default new Vuex.Store({
 */
 
 // LESSON 165:PART 2 ...
+                // *POST* LESSON 166 ... WR__ extra credit = Sync with Server :o)
+                // We LEAVE this State property with its same name ("from Global Var") ...
+                // ... even though we go on to actually use it, fill it, with data from the Server
+                //   (allEventsFromServerAsMomentObjects)
+                // That takes place whenever the User clicks to request that "Sync!". Bon.
+
                 state.mockDataEventsAsMomentObjectsFromGlobalVar.push( payload
 
 
@@ -151,7 +174,15 @@ Instructor Code approach, by comparison:
                 ) // /.push()
 
 
-            } // /SaveMyEventMutation()
+            }, // /SaveMyEventMutation()
+
+            doSyncMutation(state, payload) {
+                /*
+                Payload is allEventsFromServerAsMomentObjects. Veddy nice.
+                 */
+ //               state.mockDataEventsAsMomentObjectsFromGlobalVar = [] // empty it out (!) (?)
+                state.mockDataEventsAsMomentObjectsFromGlobalVar = payload // whamma-jamma ???
+            }
         }, // /mutations: {}
     actions: {
 
@@ -221,7 +252,44 @@ Instructor Code approach, by comparison:
                         }
                     })
             }) // /PROMISE
-        } // /addEventAction   (returns a Promise)  see EventForm.vue
+        }, // /addEventAction   (returns a Promise)  see EventForm.vue
+
+        doSyncAction(context) { // << No payload
+            // Dispatched from: CurrentMonth.vue
+            // - This Action (HERE IN /STORE/INDEX.JS) should:
+            //     A) Brute Force / Much Easier / Good Enough
+            // - 1) send GET to '/events'
+            // - 2) receive back all the OnServer Events
+            // - 3) pretty much replace the Vuex Store State for Events, oui?
+            return new Promise((resolve, reject) => {
+                Axios.get('/events')
+                    .then((response) => {
+
+                        console.log('doSyncAction response.status: ', response.status) // 200
+                        console.log('doSyncAction response: ', response) // response.data: [] Array of {}. wr__date is just a String, pretty sure.
+
+                        if(response.status === 200) {
+                            console.log('doSyncAction response.data: ', response.data)
+
+                            // We have wr__dates that are just Strings. Need to "Momentize()" (like we do in WEB.ENTRY.JS)
+                            let allEventsFromServerAsMomentObjects = []
+                            allEventsFromServerAsMomentObjects = response.data.map(function(eachEvent) {
+                                return {
+                                    description: eachEvent.description,
+                                    wr__date: moment(eachEvent.wr__date)
+                                }
+                            })
+
+                            // https://alligator.io/vuejs/rest-api-axios/
+                            context.commit('doSyncMutation', allEventsFromServerAsMomentObjects) // >> Nope >> response.data)
+                            resolve()
+                        } else {
+                            reject()
+                        }
+                    })
+            }) // /Promise
+        }
+
     } // /actions: {}
     // } // << DUMKOPPF! No need for "store: {}" wrapper around!!! (o la)
 })

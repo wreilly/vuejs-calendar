@@ -6,6 +6,16 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 
+// "Moment.js" is not really needed here. Only when we were putting in dummy entries for events.
+const moment = require('moment-timezone')
+moment.tz.setDefault('UTC') // set default time on browser
+
+const serialize = require('serialize-javascript')
+// https://www.npmjs.com/package/serialize-javascript
+
+
+app.use(require('body-parser').json())
+
 // ENV DEVELOPMENT
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
@@ -15,14 +25,58 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
   let template = fs.readFileSync(path.resolve('./index.html'), 'utf-8');
-  res.send(template);
+  // LESSON 166
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/replace
+    let contentMarker = '<!--PUTEVENTSHERE-FROMSERVER-->'
+
+    // res.send(template);
+
+    let templateWithEvents = template.replace(contentMarker, `<script>var __INITIAL_STATE__ = ${ serialize(eventsOnServer)}</script>`)
+
+    res.send(templateWithEvents);
+
 
 });
 
-// LESSON 159
-let eventsOnServer = []
+app.get('/events', (req, res) => {
+    /* Scenario:
+    User clicks our "Sync!" "!" button. Wishes to get this browser's Events updated. (In case there were Events entered on a different browser or computer.)
 
-app.use(require('body-parser').json())
+    Req:
+    No parameters nor headers nor anything sent.
+
+    Res:
+    This API call returns ALL Events on Server
+
+    Client:
+    Calling client will simply (brute force) whamma-jamma them all onto the Store's state.
+     */
+    res.send(eventsOnServer)
+
+})
+
+// LESSON 159
+// LESSON 166 hmm, Q. Does it need a dummy one ? A. No, it don't.
+// let eventsOnServer = [] // << No dummy? << Works a-ok
+// Hmm, with EMPTY array I get: from console.log over in WEB.ENTRY.JS:
+// "TypeError: window.__INITIAL_STATE__[0] is undefined"  << Yeah yeah, that's because you're asking for the [0]th element of an empty array. Knock it off awready!
+/*  Not needed this dummy one: */
+
+/*
+Looks like, way out here on server, if you want to
+ */
+let eventsOnServer = [ // You CAN make this empty, squire. []
+    { description: 'yeah 0', wr__date: "2017-10-13T00:00:00.000Z" }
+]
+/*
+let eventsOnServer = [
+    { description: 'yeah 0', wr__date: moment("2017-10-13T00:00:00.000Z") }
+]
+*/
+
+
+
+
 
 app.post('/add_event', (req, res) => {
     console.log('received ! req.body: ', req.body)

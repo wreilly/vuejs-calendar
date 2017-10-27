@@ -11,11 +11,35 @@
     <div id="app">
         <my-app></my-app>
     </div>
+
+    <!-- LESSON 166 See server.js
+    Brings in __INITIAL_STATE__ events from the *server*. Tres bien.
+    -->
+
+    <!--PUTEVENTSHERE-FROMSERVER-->
+
+    <!-- (re: above) ==> Where "the magic" happens <==
+    - When you load the page in your browser,
+    and "View Source",
+    you will see:
+
+    <script>var __INITIAL_STATE__ = [{"description":"yeah 0","wr__date":"2017-10-13T00:00:00.000Z"}]</script>
+
+    That is,
+    your program has fed into this index.html page,
+    this bit of live JavaScript,
+    that creates a (yes) GLOBAL VARIABLE,
+    "window.__INITIAL_STATE__"
+    Whoa.
+
+    -->
+
+<!--   SUPER-DUPER-SEDED By Lesson 166 (above)
     <script>
 /*
-        <!-- LESSON 165
+        &lt;!&ndash; LESSON 165
         Create a GLOBAL variable, for our Events
-        See web.entry.js -->
+        See web.entry.js &ndash;&gt;
 */
         var __INITIAL_STATE__ = [
             // As-is, these need the Moment.JS ... So we fudge it instead for this little POC (Proof Of Concept) : and we JUST USE STRINGS for "Dates"
@@ -32,6 +56,7 @@
             { description: 'yeah 3', wr__date: "2017-10-30T00:00:00.000Z" }
         ];
     </script>
+-->
     <script src="/dist/web.bundle.js"></script>
 </body>
 </html>

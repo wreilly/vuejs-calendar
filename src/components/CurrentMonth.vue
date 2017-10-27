@@ -3,7 +3,7 @@
         <div>{{ currentMonthYearFormattedHere }}</div>
         <button v-on:click="dec">-</button>
         <button v-on:click="inc">+</button>
-
+        <button v-on:click="sync">!</button> <!-- "!" means, sync! / refresh! / getmedata! -->
         <!--  Awright.
         Bit nutty below, but got it to work.
         The '&&' turns out is fine.
@@ -56,6 +56,51 @@
 <script>
     export default {
         methods: {
+            sync() {
+
+                this.$store.dispatch('doSyncAction') // no payload param etc. ...
+
+                /* Pseudo-ish-code-sorta...
+
+                SCENARIO:
+                One User, two computers (two browsers anyway).
+                This one user wants to see Events entered from either place appear, "synchronized"
+                  Should not have to refresh page.
+                  We are providing a "Sync" (!) button.
+                Both computers/browsers are hitting same server (of course)
+
+                STEPS:
+                - User clicks our "!" sync button
+                - This method sync() should:
+                - Dispatch an Action
+
+                - That Action (OVER IN /STORE/INDEX.JS) should:
+                A) Brute Force / Much Easier / Good Enough
+                - 1) send GET to '/events'
+                - 2) receive back all the OnServer Events
+                - 3) pretty much replace the Vuex Store State for Events, oui?
+                B) Smarter / More Than I Need / Etc.
+                - 1) SAME: send GET to '/events'
+                - 2) SAME: receive back all the OnServer Events
+                - 3) DIFFERENT: only add the ones you don't already have to the Store's State
+                C) Way Smarter / Way More Than I Need / Way Etc.
+                - 1) DIFFERENT: send GET to '/eventlatest'
+                - 2) DIFFERENT: receive back date-time of latest Event
+                - 3) DIFFERENT: IF per latest time you are missing any events...
+                - 4) DIFFERENT: send GET to '/events/latest'
+                - 5) DIFFERENT: receive back only those OnServer Events that are new
+                - 6) DIFFERENT: add them all to the Store's State
+
+                - So, for A.1-3,  (forget about B, C)
+                - Do Mutation to replace (all) Events on State
+
+                - DONE.
+
+                - Vue.js reactive client app then updates everything else, auto-magically... :o)
+                - Browser user who clicked Sync! will now get Events from *other* browser/users.
+                - GOOD.
+                */
+            },
             dec() {
                 console.log('dec baby!')
                 if (this.month === 1) { // January. Manual fudge back into the futuresorta

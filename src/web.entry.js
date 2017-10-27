@@ -18,8 +18,9 @@ import store from './store'
 
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC') // set default time on browser
+
 /*
-Make "Moment.JS" object available as a defined property on our Vue instance,
+Below, make "Moment.JS" object available as a defined property on our Vue instance,
 via prototype definition.
 Put a "getter()" on that returns the moment object from here off the "$root".
 And make that available in the data: {} part of our Vue instance. Hmm.
@@ -52,7 +53,12 @@ let initialState = Object.assign({}, store.state, { mockDataEventsFromInitialSta
 // They are NOT "Moment" objects. (e.g. .isSame() doesn't work)
 // So: we map() that array to get a new array with Moment objs:
 
-console.log('huhBEFORE. window.__INITIAL_STATE__[0].wr__date: ? ', window.__INITIAL_STATE__[0].wr__date) // << simple date string = ok
+// console.log('LESSON 166 -01-')
+// console.log('huhBEFORE. window.__INITIAL_STATE__ ? ', window.__INITIAL_STATE__)
+
+// Now that events initial state comes from SERVER, we DO have an initial state array, BUT, it is EMPTY (at first). So: Please to not go asking for array[0] ! It ain't there!
+// console.log('huhBEFORE. window.__INITIAL_STATE__[0].wr__date: ? ', window.__INITIAL_STATE__[0].wr__date) // << "TypeError: window.__INITIAL_STATE__[0] is undefined"
+
 // console.log('huhBEFORE. window.__INITIAL_STATE__[0].wr__date.isSame(moment()): ? ', window.__INITIAL_STATE__[0].wr__date.isSame(moment())) // << ERROR ".isSame() not a function" = ok
 
 /* WR__01 first code. changes wr__date from string to Moment object. Hmm. Not intended.
@@ -83,7 +89,11 @@ let mockDataEventsAsMomentObjectsFromGlobalVar = window.__INITIAL_STATE__.map(fu
     eventIReturn.description = eachEvent.description
     return eventIReturn
 })
+console.log('huhAFTER WR__02. window.__INITIAL_STATE__: ? ', window.__INITIAL_STATE__) // << Now from server, our initial array is EMPTY (no dummy entries). So don't go asking for the "[0]th" element!
+
+/*
 console.log('huhAFTER WR__02. window.__INITIAL_STATE__[0].wr__date: ? ', window.__INITIAL_STATE__[0].wr__date) // << remains simple date string = ok, good!
+*/
 /*
 console.log('huhAFTER WR__02. window.__INITIAL_STATE__[0].wr__date.isSame(moment()): ? ', window.__INITIAL_STATE__[0].wr__date.isSame(moment())) // << ERROR ".isSame() not a function" = ok, good!
 */

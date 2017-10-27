@@ -131,6 +131,12 @@ Sheesh
                 }
             },
             events() {
+                /* N.B. This computed events() is for ONE CALENDAR DAY.
+                We process ALL the events we have (from the Store), but we FILTER on
+                the date for this one calendar day.
+                */
+
+
 /*  Now to VUEX STORE:
                 let mockDataEvents = [
                     { description: 'yeah 0', wr__date: this.$moment().subtract(1, 'month') },
@@ -254,6 +260,7 @@ Kind of fix: 1) don't log things twice.
 // 03 - Mo' better: Only log a line for CalendarDays that DO have an Event. :o)
                 if (whatIGot.length > 0 ) {
                     console.log('**************************** >>>> whatIGot[0].wr__date: ' + whatIGot[0].wr__date.format('YYYY-MM-DD'))
+                    console.log('**************************** >>>> JSON.stringify(whatIGot): ' + JSON.stringify(whatIGot))
                 }
 
 // 01 - Don't work when there's nothing in your array!
