@@ -8,9 +8,23 @@
     <link rel="stylesheet" type="text/css" href="/dist/style.css" media="screen" />
 </head>
 <body>
-    <div id="app">
-        <my-app></my-app>
-    </div>
+<!-- LESSON 168  moved to WEB.ENTRY.JS -->
+<!-- ORIGINAL WAS:
+<div id="app">
+    <my-app></my-app>
+</div>
+-->
+<!-- WE NOW MAKE IT: -->
+<div id="app">
+    <!--<my-app></my-app>-->
+</div>
+<!-- Bit odd use case: we are replacing this HTML element/template/chunk, with a render() function.
+Okay.
+But, owing to odd use case, we actually do need to retain one part of this particular HTML chunk, namely the div with id of 'app' - why? - so we can do the initial mount of the whole durned Vue application right here.
+Okay.
+And once it does get mounted, then, by golly, our render() function right away re-writes that part of the HTML / DOM thing anyway! (whoa.)
+-->
+
 
     <!-- LESSON 166 See server.js
     Brings in __INITIAL_STATE__ events from the *server*. Tres bien.

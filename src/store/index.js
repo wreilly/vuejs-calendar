@@ -50,7 +50,8 @@ export default new Vuex.Store({
              // Worked: >> '', // Worked: >> null, // Worked: >> {},
              */
             eventCalendarDay: moment(),
-            mockDataEventsFromStore:  [ // was in CalendarDay.vue, mocked up
+            mockDataEventsFromStore:  [ // <<< NOT USED (any mo') (Could comment this out o well.)
+                // was in CalendarDay.vue, mocked up
 // LESSON 164 Now refactored to "initialState" over in WEB.ENTRY.JS
 /*
                 // { description: 'yeah 0', wr__date: this.$moment().subtract(1, 'month') },
@@ -63,7 +64,28 @@ export default new Vuex.Store({
                 { description: 'yeah 2.A', wr__date: moment().add(1, 'day') },
                 { description: 'yeah 3', wr__date: moment().add(10, 'day') }
 */
-            ]
+            ],
+            /* Don't forget: mockDataEventsAsMomentObjectsFromGlobalVar << !!
+
+            N.B. LESSON 165, 166, and my "Server Sync!":
+            The Vuex Store State gets another property, not seen here in the /STORE/INDEX.JS source code.
+            You *can* see it if you do VIEW PAGE SOURCE once you open the app on :3000/index.html
+
+            This object holds all our Events, for the CLIENT app.
+            (Note that the /SERVER.JS *also* holds all our Events, on the server side.)
+            The SERVER Events object is the source object, the canonical one, the one that 'holds truth'.
+            The SERVER Events object will occasionally overwrite the CLIENT Events object.
+            The SERVER Events object is created first: It is dynamically generated:
+              - 1) first, from /STORE/INDEX.JS (typically as an empty array, or with a token dummy entry), which is "spliced" (template.replace()) into our INDEX.HTML source, and then
+              - 2) this array is updated (added to), one Event at a time, by User clicking Add Event, Submit
+            The (Local) CLIENT gets this array of Event objects :
+             - 1) first, via WEB.ENTRY.JS, reading in "initial state" off the index.html, and then
+             - 2) this Local CLIENT array is added to, one Event at a time, by User clicking Add Event, Submit
+             The (OTHER) CLIENT gets the "Sync!" version (from Server) of this Array, by:
+             - 1) When the User clicks our "!" Sync! button, to move all the On Server Events into this state array on THEIR (Local) Client.  All Events created by any and all various Clients, will ALL be on the Server, and ALL those Events are sent out to any Client/user who does click on "Sync!".
+             Bon.
+
+             */
         },
         mutations: {
             setCurrentYear(state, payload) {

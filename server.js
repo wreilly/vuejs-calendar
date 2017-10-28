@@ -38,6 +38,16 @@ app.get('/', (req, res) => {
 
 });
 
+/* TEMPORARY
+Server-Side rendering intro etc. LESSON 169
+SCRATCH.HTML
+ */
+app.get('/scratch', (req, res) => {
+    let serverSideTemplate = fs.readFileSync(path.resolve('./scratch.html'), 'utf-8');
+    res.send(serverSideTemplate);
+});
+
+
 app.get('/events', (req, res) => {
     /* Scenario:
     User clicks our "Sync!" "!" button. Wishes to get this browser's Events updated. (In case there were Events entered on a different browser or computer.)
