@@ -94,7 +94,7 @@ export default function(mockDataEventsAsMomentObjectsFromGlobalVar) { // TODO WR
                     )
                 ]
             )
-            console.log('myVNode: ', myVNode)
+//            console.log('myVNode: ', myVNode)
             /*
              myVNode:
              children: [

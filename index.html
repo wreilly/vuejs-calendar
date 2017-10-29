@@ -14,10 +14,14 @@
     <my-app></my-app>
 </div>
 -->
+
+<!-- LESSON 174 TRYING SERVERSIDE *ABOVE* CLIENT ONE -->
+<!--PUTEVENTSHERE-FROMSERVER-->
+
 <!-- WE NOW MAKE IT: -->
-<div id="app">
+<!--<div id="app">-->
     <!--<my-app></my-app>-->
-</div>
+<!--</div>-->
 <!-- Bit odd use case: we are replacing this HTML element/template/chunk, with a render() function.
 Okay.
 But, owing to odd use case, we actually do need to retain one part of this particular HTML chunk, namely the div with id of 'app' - why? - so we can do the initial mount of the whole durned Vue application right here.
@@ -25,12 +29,25 @@ Okay.
 And once it does get mounted, then, by golly, our render() function right away re-writes that part of the HTML / DOM thing anyway! (whoa.)
 -->
 
+<!-- LESSON 174 Now we are making this EXCLUSIVELY a SSR SERVER-side  (MBU)
+We Comment Out the <div id="app"> which the CLIENT used.
+That leaves the ONLY thing in here the "marker" "PUTEVENTSHERE-FROMSERVER" seen below (also commented out)
+-->
+<!-- WE NOW MAKE IT: ALL COMMENTED OUT-->
+<!--
+<div id="app">
+    &lt;!&ndash;<my-app></my-app>&ndash;&gt;
+</div>
+-->
+
+
 
     <!-- LESSON 166 See server.js
     Brings in __INITIAL_STATE__ events from the *server*. Tres bien.
     -->
 
-    <!--PUTEVENTSHERE-FROMSERVER-->
+<!--- Nah, forget it. Not going to use: PUTEVENTSHERE-FROMSERVER-FORCLIENTWEB-->
+<!--Hmm, ORIGWASHEREBELOW-PUTEVENTSHERE-FROMSERVER-->
 
     <!-- (re: above) ==> Where "the magic" happens <==
     - When you load the page in your browser,
