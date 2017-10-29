@@ -20,7 +20,12 @@ import App from './components/App.vue'
 */
 
 
-
+/*
+ Here in WEB.ENTRY.JS we have wr__dates that are just Strings.
+ Need to "Momentize()" (like we do in WEB.ENTRY.JS)
+ // Also over in STORE/INDEX.JS
+ Also in NODE.ENTRY.JS ( I think!)
+ */
 let mockDataEventsAsMomentObjectsFromGlobalVar = window.__INITIAL_STATE__.map(function(eachEvent) {
     let eventIReturn = {}
     let momentizedDate = moment(eachEvent.wr__date)
@@ -40,9 +45,14 @@ console.log('Whoa2. window.__INITIAL_STATE__: ', window.__INITIAL_STATE__)
 // This next line is in BOTH WEB.entry.js AND NODE.entry.js
 import MyVueCalendar from './entry'
 
+// LESSON 175
+setTimeout(function() {
 // $mount Instance Method.
-MyVueCalendar(mockDataEventsAsMomentObjectsFromGlobalVar)
-    .$mount('#app')
+        MyVueCalendar(mockDataEventsAsMomentObjectsFromGlobalVar)
+            .$mount('#app')
+    }, 2000
+)
+
 
 
 /*

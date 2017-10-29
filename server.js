@@ -26,8 +26,9 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // LESSON 173 SSR
 let myBundleRenderer; // just initialize var up here ...
-// See below at 1) require('webpack-server-compiler') ...
-// and 2) app.get('/') ...
+// See below at two places:
+// 1) require('webpack-server-compiler') ...
+// 2) app.get('/') ...
 
 app.get('/', (req, res) => {
   let template = fs.readFileSync(path.resolve('./index.html'), 'utf-8');
@@ -38,12 +39,15 @@ app.get('/', (req, res) => {
 /* Forget it ...
     let contentMarker02 = '<!--PUTEVENTSHERE-FROMSERVER-FORCLIENTWEB-->'
 */
-
-         myBundleRenderer.renderToString({}, (err, html) => {
+    if(myBundleRenderer) {
+        // LESSON 175 - CONTEXT OBJECT (?).
+        // We pass in here the "eventsOnServer":
+        // I think (?) this is going to our NODE.ENTRY.JS. Hmm.
+         myBundleRenderer.renderToString({ eventsOnServer }, (err, html) => {
             if(err) {
                 console.log(err)
             } else {
-                console.log(html)
+              //  console.log(html)
                 /* Gives us our "APP" <div>
 
                  <div id="app" data-server-rendered="true">
