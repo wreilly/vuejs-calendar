@@ -1,23 +1,19 @@
-/*  LESSON 171 NO LONGER NEEDED:
-import Vue from 'vue'
-*/
-
 // LESSON 171
 // SSR - Server-Side Rendering
 // We REFACTOR much of this OUT of WEB.ENTRY.JS to ENTRY.JS
 
-// Sort of hard-coded bringing it in now; Webpack will be taking care of this, & Etc.
-import './style.scss'
+/*  LESSON 171 NO LONGER NEEDED:
+ import Vue from 'vue'
+ */
 
+import './style.scss'
 
 /* LESSON 171 NOT USED HERE:
 import store from './store'
 */
 
-
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC') // set default time on browser
-
 
 /*
 import App from './components/App.vue'
@@ -39,8 +35,9 @@ console.log('Whoa. mockDataEventsAsMomentObjectsFromGlobalVar: ', mockDataEvents
 
 console.log('Whoa2. window.__INITIAL_STATE__: ', window.__INITIAL_STATE__)
 
-// The component is *not named* over in entry.js
+// The "root" component is *not named* over in entry.js
 // I have named it here (for my purposes)
+// This next line is in BOTH WEB.entry.js AND NODE.entry.js
 import MyVueCalendar from './entry'
 
 // $mount Instance Method.
@@ -82,7 +79,7 @@ new Vue({
     'my-app': App
     },
     store, // << Newfangled ES6 grooviness
-    render(createElement) {
+    render(createElement) { // << Server-Side Rendering (SSR)
          let myVNode = createElement(
             'div',
             { attrs: { id: 'app'} },

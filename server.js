@@ -49,7 +49,9 @@ app.get('/scratch', (req, res) => {
 
 
 app.get('/events', (req, res) => {
-    /* Scenario:
+
+    /* WR__ "Extra Credit" (!) :o)
+    Scenario:
     User clicks our "Sync!" "!" button. Wishes to get this browser's Events updated. (In case there were Events entered on a different browser or computer.)
 
     Req:
@@ -112,6 +114,11 @@ if (process.env.NODE_ENV === 'development') {
   const reload = require('reload');
   const reloadServer = reload(server, app);
   require('./webpack-dev-middleware').init(app);
+
+  // SSR. LESSON 172
+    require('./webpack-server-compiler').init(function(bundle) {
+        console.log('SSR Node bundle built or so we\'re told: ') //, bundle) // << Whoa that's alotta code (MBs of code)
+    })
 }
 
 server.listen(process.env.PORT, function () {
