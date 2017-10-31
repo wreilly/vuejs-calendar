@@ -293,7 +293,9 @@ Instructor Code approach, by comparison:
                         if(response.status === 200) {
                             console.log('doSyncAction response.data: ', response.data)
 
-                            // We have wr__dates that are just Strings. Need to "Momentize()" (like we do in WEB.ENTRY.JS)
+                            // We have wr__dates that are just Strings.
+                            // Need to "Momentize()" (like we do in WEB.ENTRY.JS and NODE.ENTRY.JS and /STORE.INDEX.JS)
+                            // https://www.udemy.com/vuejs-2-essentials/learn/v4/questions/2304096
                             let allEventsFromServerAsMomentObjects = []
                             allEventsFromServerAsMomentObjects = response.data.map(function(eachEvent) {
                                 return {

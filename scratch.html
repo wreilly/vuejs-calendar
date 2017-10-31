@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue.js Calendar</title>
+    <link rel="icon" href="/public/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" type="text/css" href="/dist/style.css" media="screen" />
+</head>
+<body>
+
+
+<div id="app"><div><div id="header"><div><h3>Vue.js Calendar</h3></div> <div><div><div>October 2017</div> <button>-</button> <button>+</button> <button>!</button> <div><div style="color: rgb(0, 0, 0); cursor: auto; margin-left: 0.25rem;">Today</div></div></div></div></div> <div id="day-bar"><div>Mon</div> <div>Tue</div> <div>Wed</div> <div>Thu</div> <div>Fri</div> <div>Sat</div> <div>Sun</div></div> <div id="calendar"><div class="calendar-week"><div class="day past not-current-month">
+    25
+    <ul class="event-list"></ul></div><div class="day past not-current-month">
+    26
+    <ul class="event-list"></ul></div><div class="day past not-current-month">
+    27
+    <ul class="event-list"></ul></div><div class="day past not-current-month">
+    28
+    <ul class="event-list"></ul></div><div class="day past not-current-month">
+    29
+    <ul class="event-list"></ul></div><div class="day past not-current-month">
+    30
+    <ul class="event-list"></ul></div><div class="day past">
+    1
+    <ul class="event-list"></ul></div></div><div class="calendar-week"><div class="day past">
+    2
+    <ul class="event-list"></ul></div><div class="day past">
+    3
+    <ul class="event-list"></ul></div><div class="day past">
+    4
+    <ul class="event-list"></ul></div><div class="day past">
+    5
+    <ul class="event-list"></ul></div><div class="day past">
+    6
+    <ul class="event-list"></ul></div><div class="day past">
+    7
+    <ul class="event-list"></ul></div><div class="day past">
+    8
+    <ul class="event-list"></ul></div></div><div class="calendar-week"><div class="day past">
+    9
+    <ul class="event-list"></ul></div><div class="day past">
+    10
+    <ul class="event-list"></ul></div><div class="day past">
+    11
+    <ul class="event-list"><li>Version 49 | 2017-10-11</li></ul></div><div class="day past">
+    12
+    <ul class="event-list"></ul></div><div class="day past">
+    13
+    <ul class="event-list"><li>yeah 0 | 2017-10-13</li><li>Chrome 61 on the 13th | 2017-10-13</li></ul></div><div class="day past">
+    14
+    <ul class="event-list"></ul></div><div class="day past">
+    15
+    <ul class="event-list"></ul></div></div><div class="calendar-week"><div class="day past">
+    16
+    <ul class="event-list"></ul></div><div class="day past">
+    17
+    <ul class="event-list"></ul></div><div class="day past">
+    18
+    <ul class="event-list"><li>New stuff not seen in page source index.html RIGHT | 2017-10-18</li></ul></div><div class="day past">
+    19
+    <ul class="event-list"></ul></div><div class="day past">
+    20
+    <ul class="event-list"></ul></div><div class="day past">
+    21
+    <ul class="event-list"></ul></div><div class="day past">
+    22
+    <ul class="event-list"></ul></div></div><div class="calendar-week"><div class="day past">
+    23
+    <ul class="event-list"></ul></div><div class="day past">
+    24
+    <ul class="event-list"></ul></div><div class="day past">
+    25
+    <ul class="event-list"></ul></div><div class="day past">
+    26
+    <ul class="event-list"></ul></div><div class="day past">
+    27
+    <ul class="event-list"></ul></div><div class="day today">
+    28
+    <ul class="event-list"><li>tennis | 2017-10-28</li><li>roof | 2017-10-28</li></ul></div><div class="day">
+    29
+    <ul class="event-list"><li>Necessary | 2017-10-29</li></ul></div></div><div class="calendar-week"><div class="day">
+    30
+    <ul class="event-list"></ul></div><div class="day">
+    31
+    <ul class="event-list"></ul></div><div class="day not-current-month">
+    1
+    <ul class="event-list"></ul></div><div class="day not-current-month">
+    2
+    <ul class="event-list"></ul></div><div class="day not-current-month">
+    3
+    <ul class="event-list"></ul></div><div class="day not-current-month">
+    4
+    <ul class="event-list"></ul></div><div class="day not-current-month">
+    5
+    <ul class="event-list"></ul></div></div></div> <div id="event-form" class="" style="top: 450px; left: 50px;"><h4>Add an event</h4> <div class="text"><div>Saturday, Oct 28th</div> <input type="text" placeholder="Wild asparagus picking"></div> <div class="buttons"><button type="submit">Save</button></div> <button id="close-button">✕</button></div></div></div>
+
+<!-- LESSON 166 See server.js
+Brings in __INITIAL_STATE__ events from the *server*. Tres bien.
+-->
+
+<script>var __INITIAL_STATE__ = [{"description":"yeah 0","wr__date":"2017-10-13T00:00:00.000Z"},{"description":"tennis","wr__date":"2017-10-28T00:00:00.000Z"},{"description":"roof","wr__date":"2017-10-28T00:00:00.000Z"},{"description":"Version 49","wr__date":"2017-10-11T00:00:00.000Z"},{"description":"Necessary","wr__date":"2017-10-29T00:00:00.000Z"},{"description":"Chrome 61 on the 13th","wr__date":"2017-10-13T00:00:00.000Z"},{"description":"New stuff not seen in page source index.html RIGHT","wr__date":"2017-10-18T00:00:00.000Z"}]</script>
+
+<!-- (re: above) ==> Where "the magic" happens <==
+- When you load the page in your browser,
+and "View Source",
+you will see:
+
+<script>var __INITIAL_STATE__ = [{"description":"yeah 0","wr__date":"2017-10-13T00:00:00.000Z"}]</script>
+
+That is,
+your program has fed into this index.html page,
+this bit of live JavaScript,
+that creates a (yes) GLOBAL VARIABLE,
+"window.__INITIAL_STATE__"
+Whoa.
+
+-->
+
+<!--   SUPER-DUPER-SEDED By Lesson 166 (above)
+    <script>
+/*
+        &lt;!&ndash; LESSON 165
+        Create a GLOBAL variable, for our Events
+        See web.entry.js &ndash;&gt;
+*/
+        var __INITIAL_STATE__ = [
+            // As-is, these need the Moment.JS ... So we fudge it instead for this little POC (Proof Of Concept) : and we JUST USE STRINGS for "Dates"
+
+//            { description: 'yeah 0', wr__date: moment().subtract(1, 'month') },
+//            { description: 'yeah 1', wr__date: moment() },
+//            { description: 'yeah 2', wr__date: moment().add(1, 'day') },
+//            { description: 'yeah 2.A', wr__date: moment().add(1, 'day') },
+//            { description: 'yeah 3', wr__date: moment().add(10, 'day') }
+            { description: 'yeah 0', wr__date: "2017-10-13T00:00:00.000Z" },
+            { description: 'yeah 1', wr__date: "2017-10-13T00:09:00.000Z" },
+            { description: 'yeah 2', wr__date: "2017-10-14T00:00:00.000Z" },
+            { description: 'yeah 2.A', wr__date: "2017-09-23T00:00:00.000Z" },
+            { description: 'yeah 3', wr__date: "2017-10-30T00:00:00.000Z" }
+        ];
+    </script>
+-->
+<script src="/dist/web.bundle.js"></script>
+</body>
+</html>

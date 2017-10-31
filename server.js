@@ -6,9 +6,12 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 
-// "Moment.js" is not really needed here. Only when we were putting in dummy entries for events.
+// "Moment.js" is not really needed here. Only when we were initially putting in dummy entries for events, right here in our server.js file.
+// The location where we put those dummy Events has been refactored a few times (!)
+/*
 const moment = require('moment-timezone')
 moment.tz.setDefault('UTC') // set default time on browser
+*/
 
 const serialize = require('serialize-javascript')
 // https://www.npmjs.com/package/serialize-javascript
@@ -74,9 +77,12 @@ app.get('/', (req, res) => {
 No.
 I think we've changed it to be just Server/Node now, leaving behind the Client/Web mode.
 I think.
-No:
+No, cannot do this line:
                 let templateWithEvents02 = templateWithEvents.replace(contentMarker02, `<script>var __INITIAL_STATE__ = ${ serialize(eventsOnServer)}</script>\n${html}`)
  res.send(templateWithEvents02);
+
+ Update. Hang on. Seems we are doing BOTH: APP (client) and the SERVER-SIDE.
+ (Dis is confusing, honeshly.)
  */
                 res.send(templateWithEvents);
             }
@@ -142,7 +148,14 @@ Looks like, way out here on server, if you want to
 let eventsOnServer = [ // You CAN make this empty, squire. []
     { description: 'yeah 0', wr__date: "2017-10-13T00:00:00.000Z" }
 ]
-/*
+/* N.B. Yeah, Instructor Code *does* use this "Momentize" mode, here in server.js:
+ https://github.com/wreilly/vuejs-calendar/blob/lecture/177/server.js
+
+ Whereas my WR__ code does not.
+ And that means I (above) start with just String, not an Object, for my "wr__date".
+ And that means I must do the "Momentizing" later: in Web.Entry.Js and in Node.Entry.Js and also in the /Store/Index.Js.
+ O.K.
+
 let eventsOnServer = [
     { description: 'yeah 0', wr__date: moment("2017-10-13T00:00:00.000Z") }
 ]
@@ -174,16 +187,97 @@ const server = http.createServer(app);
 if (process.env.NODE_ENV === 'development') {
     console.log('YEAH WE\'RE IN *DEVELOPMENT* (see .env) webpack-dev-middleware ')
   const reload = require('reload');
-  const reloadServer = reload(server, app);
+  const myReloadServer = reload(server, app);
+  console.log('WR__ myReloadServer is whaaa? ', myReloadServer)
+    /*
+     { connections: Set {},
+     server: [Function: reload],
+     reload: [Function: reload],
+     sendMessage: [Function: sendMessage] }
+     */
+
+/* Kinda odd. If (for experimental pedagogical reasons) you Comment Out the next line (no "APP), then the system will:
+ - serve up what the SERVER SIDE Only provides - a "Calendar" with No CSS, and with whatever Events are On The Server, and with No Clickable Functionality, and with an exposed "Event Form" that does not however respond to a "Save" button click.
+ - Cheers.
+
+So, resist temptation to Comment Out.
+  */
+
   require('./webpack-dev-middleware').init(app);
+
 
   // SSR. LESSON 172
     require('./webpack-server-compiler').init(function(bundle) {
-        console.log('SSR Node bundle built or so we\'re told: ') //, bundle) // << Whoa that's alotta code (MBs of code)
+
+        // LESSON 176 ReLoad...
+        let needsReload = (myBundleRenderer === undefined) // << Boolean
+        console.log('WR__ reload What iss needsReload ?', needsReload) // true
+
+        console.log('WR__ SSR Node bundle built or so we\'re told: ', bundle.substring(0,200)) // With substring, not so bad: 200 chars...
+        // /*
+        //  WR__ SSR Node bundle built or so we're told:  module.exports =
+        //  /******/ (function(modules) { // webpackBootstrap
+        //     /******/ 	// The module cache
+        //     /******/ 	var installedModules = {};
+        //     /******/
+        //     /******/ 	// The require function
+        //     /******/ 	function __we
+        //
+        //     */
+
+        // << Whoa that's alotta code (MBs of code)
+ /*       /!* i.e.,
+        ...
+         module.exports = require("util");
+
+         /!***!/ }),
+        /!* 261 *!/
+        /!***!/ (function(module, exports) {
+
+        module.exports = require("zlib");
+
+        /!***!/ }),
+        /!* 262 *!/
+        /!***!/ (function(module, exports, __webpack_require__) {
+
+        module.exports = __webpack_require__(174);
+
+
+        /!***!/ })
+    /!******!/ ]);
+
+         *!/
+ */
+
+
+
+
+ 
         // LESSON 173
         // let myBundleRenderer = require('vue-server-renderer').createBundleRenderer(bundle)
         myBundleRenderer = require('vue-server-renderer').createBundleRenderer(bundle)
+
+        console.log('WR__ reload What iss needsReload -02- ?', needsReload)  // true
+
+        // LESSON 176 Reload...
+        // https://www.npmjs.com/package/reload#manually-firing-server-side-reload-events
+        // N.B. I have reload v1:
+        // reload                         1.1.7   1.1.7   2.2.2  wr-vue-calendar
+        if (needsReload) {
+            console.log('WR__ reload do we ever get here?') // Yes, in fact.
+            console.log('WR__ myReloadServer is whaaa? ', myReloadServer)
+             console.log('WR__ myReloadServer.reload is whaaa? ', myReloadServer.reload)
+            /*
+             function () {
+             sendMessage('reload')
+             }
+             */
+
+            myReloadServer.reload() // This is NOT woikin'! Harrumph. O well.
+        }
+
     })
+
 }
 
 server.listen(process.env.PORT, function () {

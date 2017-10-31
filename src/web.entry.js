@@ -22,9 +22,8 @@ import App from './components/App.vue'
 
 /*
  Here in WEB.ENTRY.JS we have wr__dates that are just Strings.
- Need to "Momentize()" (like we do in WEB.ENTRY.JS)
- // Also over in STORE/INDEX.JS
- Also in NODE.ENTRY.JS ( I think!)
+ Need to "Momentize()" (like we do in WEB.ENTRY.JS and NODE.ENTRY.JS and /STORE.INDEX.JS)
+ https://www.udemy.com/vuejs-2-essentials/learn/v4/questions/2304096
  */
 let mockDataEventsAsMomentObjectsFromGlobalVar = window.__INITIAL_STATE__.map(function(eachEvent) {
     let eventIReturn = {}

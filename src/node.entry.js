@@ -2,7 +2,7 @@
 import MyVueCalendar from './entry'
 
 // LESSON 175
-// Ye Gods
+// Ye Gods, Momentizing again
 import moment from 'moment-timezone'
 moment.tz.setDefault('UTC') // set default time on browser
 
@@ -19,8 +19,8 @@ export default function(wr__context) {
 
     /* (I think)
      Here in NODE.ENTRY.JS we have wr__dates that are just Strings.
-     Need to "Momentize()" (like we do in WEB.ENTRY.JS)
-     // Also over in STORE/INDEX.JS
+     Need to "Momentize()" (like we do in WEB.ENTRY.JS) (and NODE.ENTRY.JS and in STORE/INDEX.JS
+     https://www.udemy.com/vuejs-2-essentials/learn/v4/questions/2304096
      */
     let wr__ContextEventsAsMomentObjectsFromEventsOnServer = wr__context.eventsOnServer.map(function(eachEvent) {
         let eventIReturn = {}
