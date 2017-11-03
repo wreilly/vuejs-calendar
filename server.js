@@ -273,7 +273,9 @@ So, resist temptation to Comment Out.
              }
              */
 
+/* 2017-11-03 COMMENT THIS OUT. IN LOCAL. SHEESH.
             myReloadServer.reload() // This is NOT woikin'! Harrumph. O well.
+*/
         }
 
     })
